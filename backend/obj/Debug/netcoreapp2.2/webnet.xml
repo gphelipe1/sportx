@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>webnet</name>
+    </assembly>
+    <members>
+        <member name="M:webnet.Controllers.ClientController.GetAllClients">
+            <summary>
+            Return all the clients stored.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:webnet.Controllers.ClientController.Update(webnet.DTO.ClienteDto)">
+            <summary>
+            Updates a client from the database.
+            </summary>
+            <param id="id" >The Client's Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:webnet.Controllers.ClientController.GetClientsByTypes(webnet.Enums.UserType)">
+            <summary>
+            Return a list of Clients by Types.
+            </summary>
+            <param type="Type" >The Type of Clients to Return</param>
+            <returns></returns>
+        </member>
+        <member name="M:webnet.Controllers.ClientController.GetByCPF(System.String)">
+            <summary>
+            Return a Client by CPF.
+            </summary>
+            <param CPF="CPF" >CPF</param>
+            <returns></returns>
+        </member>
+        <member name="M:webnet.Controllers.ClientController.GetByCNPJ(System.String)">
+            <summary>
+            Return a Client by CNPJ.
+            </summary>
+            <param CNPJ="CNPJ" >CNPJ</param>
+            <returns></returns>
+        </member>
+        <member name="M:webnet.Controllers.ClientController.Save(webnet.DTO.ClienteDto)">
+            <summary>
+            Save a new Client into the database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:webnet.Controllers.ClientController.Delete(System.Int32)">
+            <summary>
+            Delete a client from the database.
+            </summary>
+            <param id="id" >The Client's Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:webnet.Controllers.UserController.Login(webnet.DTO.UserDto)">
+            <summary>
+            Login do usuário - ADMIN/ADMIN DEFAULT
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
