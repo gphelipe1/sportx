@@ -1,4 +1,4 @@
-# SportX System
+# SportX
 
 ## Training Repository  | Backend - c#, .NET Core 2.2 | Frontend - ReactJS
  This repository contains usefull react components, such as a responsive and customizable table (using pagination), login card, authentication system (...)
