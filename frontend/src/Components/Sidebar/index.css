@@ -1,0 +1,15 @@
+
+.logo{
+  height: 40px !important; 
+  width: 40px !important;
+}
+
+.burguer-menu{
+  border: none;
+  background-color: inherit;
+  margin-right: 30px;
+}
+
+.burguer-menu:hover{
+  cursor: pointer;
+}

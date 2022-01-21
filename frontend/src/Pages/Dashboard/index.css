@@ -1,4 +1,8 @@
-body{
-    background-color: #282c34;
-    color:aliceblue;
+.tableContainer{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pagination-bar{
+    margih-left:300px;
 }
