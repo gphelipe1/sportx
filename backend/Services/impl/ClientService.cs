@@ -9,6 +9,7 @@ using webnet.DAO;
 using AutoMapper;
 using webnet.Helpers;
 using webnet.Context;
+using Canducci.Pagination;
 
 namespace webnet.Services
 {
@@ -45,11 +46,10 @@ namespace webnet.Services
             return clientsDto;
         }
 
-        public List<ClienteDto> GetAllClients()
+        public Paginated<Cliente> GetAllClients(int page, int size)
         {
-            var clients = _repository.GetAll();
-            var clientsListDto = _mapper.Map<List<Cliente>, List<ClienteDto>>(clients);
-            return clientsListDto;
+            var result = _repository.GetAllPaginated(page, size);
+            return result;
         }
 
         public ClienteDto GetByCPF(string cpf)

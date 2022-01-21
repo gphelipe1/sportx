@@ -4,11 +4,13 @@
         <name>webnet</name>
     </assembly>
     <members>
-        <member name="M:webnet.Controllers.ClientController.GetAllClients">
-            <summary>
-            Return all the clients stored.
-            </summary>
-            <returns></returns>
+        <member name="M:webnet.Controllers.ClientController.GetAllClients(System.Int32,System.Int32)">
+             <summary>
+             Return all the clients stored.
+             </summary>
+            <param page="Number of the current page"></param>
+            <param size="Size of each page"></param>
+             <returns></returns>
         </member>
         <member name="M:webnet.Controllers.ClientController.Update(webnet.DTO.ClienteDto)">
             <summary>

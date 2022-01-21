@@ -10,6 +10,7 @@ using webnet.Enums;
 using System;
 using webnet.Services;
 using Microsoft.AspNetCore.Authorization;
+using Canducci.Pagination;
 
 namespace webnet.Controllers
 {
@@ -35,18 +36,20 @@ namespace webnet.Controllers
         /// <summary>
         /// Return all the clients stored.
         /// </summary>
+        ///<param page="Number of the current page"></param>
+        ///<param size="Size of each page"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("")]
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize]
-        public ActionResult<List<ClienteDto>> GetAllClients()
+        public IActionResult GetAllClients(int page=1, int size=10)
         {
             try {
-
-            var clientes = _service.GetAllClients();
-            return clientes;
+            
+            var clientes = _service.GetAllClients(page, size);
+            return Ok(clientes);
 
             } catch(Exception e)
             {

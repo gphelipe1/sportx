@@ -2,6 +2,9 @@ using System.Linq;
 using System.Collections.Generic;
 using webnet.DAO;
 using webnet.Enums;
+using webnet.DTO;
+using Microsoft.EntityFrameworkCore;
+using Canducci.Pagination;
 
 namespace webnet.Context
 {
@@ -33,6 +36,12 @@ namespace webnet.Context
         {
             var clientes = _context.Clientes.ToList();
             return clientes;
+        }
+
+        public Paginated<Cliente> GetAllPaginated(int page, int size)
+        {
+            var result = _context.Clientes.AsNoTracking().OrderBy(c => c.id).ToPaginated(page,size);
+            return result;
         }
 
         public List<Cliente> GetByUserType(UserType type)
