@@ -12,7 +12,7 @@ namespace webnet.Context
         Cliente Create(Cliente cliente);
         Cliente Update(Cliente cliente);
         List<Cliente> GetAll();
-        Paginated<Cliente> GetAllPaginated(int page, int size);
+        ResponseClienteDto GetAllPaginated(int page, int size);
         List<Cliente> GetByUserType(UserType type);
         Cliente GetByEmail(string email);
         Cliente GetByCPF(string cpf);

@@ -48,6 +48,8 @@ namespace webnet.Controllers
         {
             try {
             
+            if(page < 1) page = 1;
+
             var clientes = _service.GetAllClients(page, size);
             return Ok(clientes);
 

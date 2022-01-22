@@ -2,6 +2,7 @@ table {
   border: 1px solid #ccc;
   border-collapse: collapse;
   margin-left: 20%;
+  margin-top: 10%;
   padding: 0;
   width: 70%;
   table-layout: fixed;
@@ -34,7 +35,7 @@ table td {
 }
 
 th{
-  background-color: rgb(96, 142, 150);
+  background-color: rgb(145, 185, 192);
 }
 
 .hover:hover{
@@ -57,6 +58,7 @@ table th {
     border: 0;
     width: 100vw;
     margin: 0;
+    margin-top: 10%;
   }
 
   .mimicrow{

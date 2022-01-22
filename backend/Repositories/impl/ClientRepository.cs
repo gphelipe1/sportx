@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using webnet.DAO;
@@ -38,10 +39,19 @@ namespace webnet.Context
             return clientes;
         }
 
-        public Paginated<Cliente> GetAllPaginated(int page, int size)
+        public ResponseClienteDto GetAllPaginated(int page, int size)
         {
             var result = _context.Clientes.AsNoTracking().OrderBy(c => c.id).ToPaginated(page,size);
-            return result;
+            var totalElements = _context.Clientes.AsNoTracking().Count();
+            var totalPages = (int) (totalElements + size - 1) / size;
+            var response = new ResponseClienteDto {
+                items = result,
+                pagesCount = totalPages,
+                totalItems = totalElements,
+                itemsPerPage = size,
+                currentPage = page
+            };
+            return response;
         }
 
         public List<Cliente> GetByUserType(UserType type)
