@@ -15,11 +15,11 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import Logo from '../../Assets/Logos/logosport.png'
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import './index.css';
 import { logout } from '../../Services/auth';
 import { Navigate } from 'react-router-dom';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Button } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';;
 
 export const customTheme = createTheme({
     palette: {
@@ -47,6 +47,7 @@ const homeClick = () => {
 
 export default function PermanentDrawerLeft() {
   const [drawerWidth, setDrawerWidth] = useState(240);
+  // eslint-disable-next-line no-unused-vars
   const [openBurguer, setOpenBurguer] = useState(false);
 
   // const handleBurguerClick =() => {
@@ -116,13 +117,15 @@ export default function PermanentDrawerLeft() {
             <Toolbar />
             <Divider />
             <List>
-          {['Home', 'Logout'].map((text, index) => (
+          {['Home', 'Add Client','Logout'].map((text, index) => (
+            <>
+            {text ==='Logout' ? <><br/><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}
             <ListItem button key={text} onClick={ text === 'Logout' ? logoutClick : homeClick } >
               <ListItemIcon>
-                {text === 'Home' ? <HomeIcon /> : <LogoutIcon />}
+                {text === 'Home' ? <HomeIcon /> : text === 'Logout' ? <LogoutIcon/> : <PersonAddIcon/> }
               </ListItemIcon>
               <ListItemText primary={text} />
-            </ListItem>
+            </ListItem>{text ==='Logout' ? <><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}</>
           ))}
         </List>
         </Drawer>

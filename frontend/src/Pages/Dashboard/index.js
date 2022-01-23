@@ -6,8 +6,11 @@ import './index.css'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../../Services/auth';
 import { getClients } from '../../Services/clients';
-import Table from '../../Components/Table'
-
+import Table from '../../Components/Table';
+import AddNewClient from '../../Components/AddNewClient';
+import { Stack } from '@mui/material';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { Button } from '@mui/material';
 function Dashboard()
 {   
     const tableColumns=['ID', 'Nome/Razão Social', 'Email', 'Tipo', 'Classificação', 'CEP', 'CPF/CNPJ', 'Telefone'];
@@ -19,6 +22,7 @@ function Dashboard()
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(8);
     const [pagesCount, setPagesCount] = useState(0);
+    const [addClient, setAddClient] = useState(false);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -36,6 +40,11 @@ function Dashboard()
         setLoading(false);
     }
 
+    function addClientController (){
+        let flag = addClient;
+        setAddClient(!flag);
+    }
+
     useEffect(() => {
         if (!isAuthenticated()) {
             Navigate('/login');
@@ -46,12 +55,17 @@ function Dashboard()
     useEffect(() => {
         getData(page,rowsPerPage);
     }, [page]);
+    
 
     return(
         <>
+            
             <Sidebar />
             <div className="tableContainer">
                 <Table tableData={data} headingColumns={tableColumns} loading={loading} page={page} pagesCount={pagesCount} handler={handleChangePage}/>
+            </div>
+            <div>
+                {addClient === true  ? <AddNewClient controller={addClient} setController={setAddClient} title="Adicionar Novo Cliente" closeBtn={true} /> : <></> }
             </div>
            </>
     );

@@ -2,13 +2,14 @@ import React from 'react';
 import './index.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-
+import IMG from '../../Assets/Images/no-data.gif';
 export default function Table({ tableData, headingColumns, loading, page, pagesCount, handler}) {
 
 
   return (
     <div className="tableDiv">
-      {tableData.length === 0 ? <><iframe src="https://giphy.com/embed/W8I7CDnUvofPPFbCZN" width="303" height="480" frameBorder="0" className="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/stickers/alien-ufo-coinis-W8I7CDnUvofPPFbCZN"></a></p><h1 className="noData">No Data Available</h1></> : 
+      {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
+      {tableData.length === 0 ? <><img src={require('../../Assets/Images/no-data.gif')}  class="giphy-embed" ></img><p style={{color: "#fff"}}><h5 style={{marginLeft: '30%' }}>Sem clientes Cadastrados :(</h5></p></> : 
       <>
       <table>
         <thead>
@@ -33,13 +34,14 @@ export default function Table({ tableData, headingColumns, loading, page, pagesC
           }) : <></>}
         </tbody>
       </table></>}
+      { tableData.length > 0 ?
       <Stack className="mimicrow" spacing={2}  sx={{ bgcolor: (theme) => ('#fff'),
               p: 1,
               borderRadius: 0,
               textAlign: 'center',
           }} >
           <Pagination sx={{ml:'auto', mr: 'auto'}}variant="outlined" color="primary" count={pagesCount} showFirstButton showLastButton onChange={handler} />
-      </Stack>
+      </Stack> : <></> }
     </div>
 
   );

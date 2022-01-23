@@ -41,7 +41,17 @@ namespace webnet
             services.AddSingleton(mapper);
             // AutoMapper Configuration - END
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.SetIsOriginAllowed((host) => true)
+                        .AllowCredentials()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin()
+                        .WithMethods("GET", "PUT", "POST", "DELETE")
+                        .AllowAnyHeader());
+            });
+            // new CORS Configuration - END
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<DataContext>(options => {

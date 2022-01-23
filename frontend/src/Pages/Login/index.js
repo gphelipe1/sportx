@@ -130,7 +130,7 @@ function LoginPage()
                 value: 3,
                 },
             },
-            detectRetina: true,
+            detectRetina: false,
         }} />
         <form onSubmit={validateUser}>
         <BoxSx element={Content()}/>
