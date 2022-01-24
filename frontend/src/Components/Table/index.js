@@ -2,7 +2,6 @@ import React from 'react';
 import './index.css';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import IMG from '../../Assets/Images/no-data.gif';
 export default function Table({ tableData, headingColumns, loading, page, pagesCount, handler}) {
 
 

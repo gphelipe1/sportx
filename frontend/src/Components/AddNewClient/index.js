@@ -16,6 +16,7 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import { saveNewClient } from '../../Services/clients';
 
  // =================================================================================
  // START-Masks CONFIG ==============================================================
@@ -120,7 +121,7 @@ const ListItem = styled('li')(({ theme }) => ({
 // END-Complements ==================================================================
 // ==================================================================================
 
-function AddNewClient({controller, setController, title, closeBtn}) {
+function AddNewClient({controller, setController, title, closeBtn, setClientAdded}) {
     const [popupOutputsTrigger, setPopupOutputsTrigger] = useState(false)
     
     // Data
@@ -131,6 +132,7 @@ function AddNewClient({controller, setController, title, closeBtn}) {
     const [cep, setCep] = useState('');
     const [classificacao, setClassficacao] = useState('');
     const [identitySize, setIdentitySize] = useState(10);
+    const [allPhones, setAllPhones] = useState([]);
     const [newPhone, setNewPhone] = useState('');
     const [phones, setPhones] = React.useState([]);
 
@@ -172,7 +174,8 @@ function AddNewClient({controller, setController, title, closeBtn}) {
 
     const handleAddPhoneToList = () => {
       if(!phones.some(el => el.key === newPhone) && (newPhone.length === 15 || newPhone.length === 16) ) {
-        setPhones(prev => [ ...prev,  { key: newPhone, label: newPhone }])
+        setPhones(prev => [ ...prev,  { key: newPhone, label: newPhone }]);
+        setAllPhones(prev => [...prev, newPhone]);
         setNewPhone('');
       }
     }
@@ -246,7 +249,9 @@ function AddNewClient({controller, setController, title, closeBtn}) {
 
     // SEND DATA TO DATABASE
     const sendDada = async () => {
-
+      console.log(allPhones);
+      const response = await saveNewClient(name, email, type, classificacao, cep, identity, allPhones);
+      return response;
     }
 
     // VALIDATE ALL DATA BEFORE SEND IT TO DATABASE
@@ -264,8 +269,9 @@ function AddNewClient({controller, setController, title, closeBtn}) {
       if(!isValidTipo()){
         err = true;
       }
-      if(err == false){
-        console.log('data can be send!!!!!!!!! =)');
+      if(err === false){
+        const res = sendDada();
+        console.log(res);
       }
     }
 
