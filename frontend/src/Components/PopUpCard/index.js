@@ -1,6 +1,5 @@
 import React from  'react'
 import Button from '@mui/material/Button';
-import propTypes from 'prop-types';
 import './index.css'
 
 function Popup(props){

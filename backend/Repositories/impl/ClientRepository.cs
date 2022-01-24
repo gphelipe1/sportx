@@ -41,7 +41,7 @@ namespace webnet.Context
 
         public ResponseClienteDto GetAllPaginated(int page, int size)
         {
-            var result = _context.Clientes.AsNoTracking().OrderBy(c => c.id).ToPaginated(page,size);
+            var result = _context.Clientes.AsNoTracking().OrderByDescending(c => c.UpdatedAt).ToPaginated(page,size);
             var totalElements = _context.Clientes.AsNoTracking().Count();
             var totalPages = (int) (totalElements + size - 1) / size;
             var response = new ResponseClienteDto {

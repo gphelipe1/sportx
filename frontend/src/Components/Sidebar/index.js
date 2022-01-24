@@ -16,10 +16,11 @@ import Logo from '../../Assets/Logos/logosport.png'
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import './index.css';
 import { logout } from '../../Services/auth';
 import { Navigate } from 'react-router-dom';
-import MenuIcon from '@mui/icons-material/Menu';;
+import MenuIcon from '@mui/icons-material/Menu';
+import AddNewClient from '../AddNewClient';
+import './index.css';
 
 export const customTheme = createTheme({
     palette: {
@@ -36,23 +37,29 @@ export const customTheme = createTheme({
     },
   });
 
-const logoutClick = () => {
-  logout();
-  window.location.reload();
-}
-
-const homeClick = () => {
-  return(<Navigate to="/home"/>);
-}
-
 export default function PermanentDrawerLeft() {
   const [drawerWidth, setDrawerWidth] = useState(240);
   // eslint-disable-next-line no-unused-vars
   const [openBurguer, setOpenBurguer] = useState(false);
 
-  // const handleBurguerClick =() => {
+  const [popUpController, setPopUpController] = useState(false);
 
-  // }
+  const logoutClick = () => {
+    logout();
+    window.location.reload();
+  }
+  
+  const addClientClick = () => {
+    const newWidth = window.innerWidth;
+    if(newWidth < 1350 && openBurguer === true){
+      setDrawerWidth(0);
+    }
+    setPopUpController(true);
+  }
+  
+  const homeClick = () => {
+    return(<Navigate to="/home"/>);
+  }
 
   const updateStatusSideBar = () => {
     if(drawerWidth===0){
@@ -71,7 +78,7 @@ export default function PermanentDrawerLeft() {
     }else{
       setDrawerWidth(220);
     }
-  };
+  }
 
   useEffect(() => {
     updateWindowDimensions();
@@ -82,54 +89,57 @@ export default function PermanentDrawerLeft() {
   },[] );
   
   return (
-    <ThemeProvider theme={customTheme}>
-        <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar
-            position="fixed"
-            sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, transition: 'width 1s' }}
-        >
-            <Toolbar>
-            
-            <Typography variant="h6" noWrap component="div">
-              <button className ="burguer-menu"
-                      onClick={() => {updateStatusSideBar()}}>
-                        {<MenuIcon/>}
-              </button>
-              <img className="logo" src={Logo} alt="logo" /> SportsX
-            </Typography>
-            </Toolbar>
-        </AppBar>
-        <Drawer
-            sx={{
-            width: drawerWidth,
-            flexShrink: 0,
-            '& .MuiDrawer-paper': {
-                width: drawerWidth,
-                boxSizing: 'border-box',
-                transition: 'width 1s'
-            },
-            color: 'dark',
-            }}
-            variant="permanent"
-            anchor="left"
-        >
-            <Toolbar />
-            <Divider />
-            <List>
-          {['Home', 'Add Client','Logout'].map((text, index) => (
-            <>
-            {text ==='Logout' ? <><br/><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}
-            <ListItem button key={text} onClick={ text === 'Logout' ? logoutClick : homeClick } >
-              <ListItemIcon>
-                {text === 'Home' ? <HomeIcon /> : text === 'Logout' ? <LogoutIcon/> : <PersonAddIcon/> }
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>{text ==='Logout' ? <><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}</>
-          ))}
-        </List>
-        </Drawer>
-        </Box>
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={customTheme}>
+          <Box sx={{ display: 'flex' }}>
+          <CssBaseline />
+          <AppBar
+              position="fixed"
+              sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px`, transition: 'width 1s' }}
+          >
+              <Toolbar>
+              
+              <Typography variant="h6" noWrap component="div">
+                <button className ="burguer-menu"
+                        onClick={() => {updateStatusSideBar()}}>
+                          {<MenuIcon/>}
+                </button>
+                <img className="logo" src={Logo} alt="logo" /> SportsX
+              </Typography>
+              </Toolbar>
+          </AppBar>
+          <Drawer
+              sx={{
+              width: drawerWidth,
+              flexShrink: 0,
+              '& .MuiDrawer-paper': {
+                  width: drawerWidth,
+                  boxSizing: 'border-box',
+                  transition: 'width 1s'
+              },
+              color: 'dark',
+              }}
+              variant="permanent"
+              anchor="left"
+          >
+              <Toolbar />
+              <Divider />
+              <List>
+            {['Home', 'Add Client','Logout'].map((text, index) => (
+              <>
+              {text ==='Logout' ? <><br/><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}
+              <ListItem button key={text} onClick={ text === 'Logout' ? logoutClick : text==='Add Client' ? addClientClick : homeClick } >
+                <ListItemIcon>
+                  {text === 'Home' ? <HomeIcon /> : text === 'Logout' ? <LogoutIcon/> : <PersonAddIcon/> }
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>{text ==='Logout' ? <><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}</>
+            ))}
+          </List>
+          </Drawer>
+          </Box>
+      </ThemeProvider>
+      < AddNewClient controller={popUpController} setController={setPopUpController} title="Adicionar Novo Cliente" closeBtn={true} />
+    </>
   );
 }

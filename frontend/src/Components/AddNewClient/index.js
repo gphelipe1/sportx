@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
+/*eslint-disable no-useless-escape */
 import React, { useState, useEffect } from 'react'
 import Popup from '../PopUpCard';
-import { TextField } from '@mui/material';
+import { responsiveFontSizes, TextField } from '@mui/material';
 import Dropdown from '../../Components/Dropdown';
 import {IMaskInput} from 'react-imask';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,9 +13,13 @@ import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
 
+ // =================================================================================
+ // START-Masks CONFIG ==============================================================
+ // =================================================================================
 const cpfMask = React.forwardRef(function TextMaskCustom(props, ref) {
     const { onChange, ...other } = props;
     return (
@@ -97,54 +102,63 @@ const phoneMask = React.forwardRef(function TextMaskCustom(props, ref) {
 cpfMask.propTypes = {
   name: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-};
+}; 
+// ==================================================================================
+// END-Masks CONFIG =================================================================
+// ==================================================================================
+
+
+// ==================================================================================
+// START-Complements ================================================================
+// ==================================================================================
 
 const ListItem = styled('li')(({ theme }) => ({
   margin: theme.spacing(0.5),
 }));
 
+// ==================================================================================
+// END-Complements ==================================================================
+// ==================================================================================
+
 function AddNewClient({controller, setController, title, closeBtn}) {
     const [popupOutputsTrigger, setPopupOutputsTrigger] = useState(false)
     
-    const [type, setType] = useState(null);
+    // Data
+    const [type, setType] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [identity, setIdentity] = useState('');
     const [cep, setCep] = useState('');
-    const [classificacao, setClassficacao] = useState(null);
-
+    const [classificacao, setClassficacao] = useState('');
     const [identitySize, setIdentitySize] = useState(10);
+    const [newPhone, setNewPhone] = useState('');
+    const [phones, setPhones] = React.useState([]);
 
     // Error  Flags
     const [erroEmail, setErroEmail] = useState(false);
+    const [erroEmailMesssage, setErroEmailMessage] = useState('');
     const [erroName, setErroName] = useState(false);
+    const [erroNameMessage, setErroNameMessage] = useState('');
+    const [erroClassificacao, setErroClassificacao] = useState(false);
+    const [erroClassificacaoMessage, setErroClassificacaoMessage] = useState('');
+    const [erroType, setErroType] = useState(false);
+    const [erroTypeMessage, setErroTypeMessage] = useState('');
 
-    const [newPhone, setNewPhone] = useState('');
-
+    // Placeholder Masks
     const maskToCpf='000.000.000-00';
     const maskToCnpj="00.000.000/0000-00";
     const maskToCep = "00-000-000";
     const maskToPhone = "(00) 0 0000-0000";
-
-    const [phones, setPhones] = React.useState([]);
-  
-    const handleDelete = (chipToDelete) => () => {
-      setPhones((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-    };
-
-    const handleName =(e) => {
-      if (e.target.value.match('/[A-Z/gi')) {
-          setErroName(true)
-      } else{
-          setErroName(false);
-      }
+    
+    // Add Client Button
+    const AddButton = () => {
+      return(<Button onClick={validateAndSend} variant='contained' color="success">Adicionar</Button>);
     }
     
-    const handleChangeIdentity = (event) => {
-      setIdentity(event.target.value);
-    };
 
+    // START-HANDLERS /////////////////////////////////
     const handleEmailChange = (event) => {
+      isValidEmail(event.target.value);
       setEmail(event.target.value);
     };
 
@@ -152,13 +166,110 @@ function AddNewClient({controller, setController, title, closeBtn}) {
       setNewPhone(event.target.value);
     }
 
+    const handleChangeCep = (event) => {
+      setCep(event.target.value);
+    };
+
     const handleAddPhoneToList = () => {
-      if(!phones.includes(phones.find(obj => {return obj.kew === newPhone;}))){
-        setPhones(prev => [ ...prev,  { key: newPhone, label: newPhone },])
+      if(!phones.some(el => el.key === newPhone) && (newPhone.length === 15 || newPhone.length === 16) ) {
+        setPhones(prev => [ ...prev,  { key: newPhone, label: newPhone }])
+        setNewPhone('');
       }
-      setNewPhone('');
     }
 
+    const handleDelete = (chipToDelete) => () => {
+      setPhones((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    };
+
+    const handleNameChange =(e) => { 
+      isValidName(e.target.value);
+      if (/^[a-zA-Z ]*$/.test(e.target.value)) {  
+        setName(e.target.value.toUpperCase());
+      }
+    }
+    
+    const handleChangeIdentity = (event) => {
+      setIdentity(event.target.value);
+    };
+    // END-HANDLERS /////////////////////////////////
+
+    // START-VALIDATIONS ///////////////////////////
+    const isValidClassificacao = () => {
+      if(classificacao === ''){
+        setErroClassificacao(true);
+        setErroClassificacaoMessage('Campo Obrigatório!');
+        return false;
+      }else{
+        setErroClassificacao(false);
+        setErroClassificacaoMessage('');
+        return true;
+      }
+    }
+
+    const isValidTipo = () => {
+      if(type === ''){
+        setErroType(true);
+        setErroTypeMessage('Campo Obrigatório!');
+        return false;
+      } else{
+        setErroType(false);
+        setErroTypeMessage('');
+        return true;
+      }
+    }
+
+    const isValidName = (nome) => {
+      if(nome === '') {
+        setErroName(true);
+        setErroNameMessage('Campo Obrigatório!');
+        return false;
+      }else{
+        setErroName(false);
+        return true;
+      }
+    }
+
+    const isValidEmail = (emailToTest) => {
+      var mailFormat = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      if(!mailFormat.test(emailToTest)) {
+        setErroEmail(true);
+        setErroEmailMessage('Por favor, informe um email válido!');
+        return false;
+      }else{
+        setErroEmail(false);
+        return true;
+      }
+    };
+
+    // END-VALIDATIONS ///////////////////////////
+    
+
+    // SEND DATA TO DATABASE
+    const sendDada = async () => {
+
+    }
+
+    // VALIDATE ALL DATA BEFORE SEND IT TO DATABASE
+    const validateAndSend = () => {
+      let err = false;
+      if(!isValidEmail(email)){
+        err = true;
+      }
+      if(!isValidClassificacao()){
+        err = true;
+      }
+      if(!isValidName(name)){
+        err = true
+      }
+      if(!isValidTipo()){
+        err = true;
+      }
+      if(err == false){
+        console.log('data can be send!!!!!!!!! =)');
+      }
+    }
+
+    // CHANGING TO 'CPF' OR 'CNPJ' SIZES
     const returnIdSize = () => {
         if(type===0) {
             setIdentitySize(14);
@@ -167,32 +278,83 @@ function AddNewClient({controller, setController, title, closeBtn}) {
         }
     }
 
+    const emptyFields = () => {
+      setName('');
+      setEmail('');
+      setType('');
+      setClassficacao('');
+      setCep('');
+      setIdentity('');
+      setPhones([]);
+      setNewPhone('');
+      setErroName(false);
+      setErroEmail(false);
+      setErroType(false);
+      setErroTypeMessage('')
+      setErroClassificacao(false);
+      setErroClassificacaoMessage('');
+    }
+
     useEffect(()=> {
         returnIdSize();
     }, [type])
 
+    useEffect(() => {
+      if(controller === false){
+        emptyFields();
+      }
+    }, [controller])
+
+    useEffect(()=>{
+      if(erroName === false){
+        setErroNameMessage('');
+      }
+    }, [erroName]);
+
+    useEffect(() => {
+      if(erroEmail === false){
+        setErroEmailMessage('');
+      }
+    }, [erroEmail]);
+
+    useEffect(() => {
+      if(classificacao !== ''){
+        setErroClassificacao(false);
+        setErroClassificacaoMessage('');
+      }
+    }, [classificacao]);
+
+    useEffect(() => {
+      if(type !== ''){
+        setErroType(false);
+        setErroTypeMessage('');
+      }
+    }, [type]);
+
     return(
-        <Popup trigger={controller} setTrigger={setController} title={title} closeBtn={closeBtn}>
+        <Popup trigger={controller} setTrigger={setController} title={title} closeBtn={closeBtn} complement={<AddButton/>}>
             <div className = "input-divs">
                 <TextField
                     label="Nome"
                     id="nome-input"
+                    value={name}
                     error={erroName}
-                    helperText={ erroName === true ? 'Campo Obrigatório' : '' }
+                    helperText={erroNameMessage}
                     sx={{ m: 1, width: '100%'}}
                     inputProps={{
                         maxLength: 100,
                     }}
-                    onChange={handleName}
+                    onChange={handleNameChange}
                 />
             </div>
             <div className = "input-divs">
             <TextField
                     label="Email"
                     id="email-input"
+                    value={email}
                     sx={{ m: 1, width: '100%' }}
                     error={erroEmail}
-                    helperText={erroEmail}
+                    helperText={erroEmailMesssage}
                     inputProps={{
                         maxLength: 100,
                     }}
@@ -200,13 +362,13 @@ function AddNewClient({controller, setController, title, closeBtn}) {
                 />
             </div>
             <div>
-                <Dropdown controller={type} setController={setType} label="Tipo" size={160} items={['Pessoa Jurídica', 'Pessoa Física']}/>
+                <Dropdown controller={type} setController={setType} label="Tipo" size={160} items={['Pessoa Jurídica', 'Pessoa Física']} error={erroType} helperText={erroTypeMessage}/>
             </div>
             <div>
-                <Dropdown controller={classificacao} setController={setClassficacao} label="Classificação" size={160} items={['Ativo', 'Inativo', 'Preferencial']}/>
+                <Dropdown controller={classificacao} setController={setClassficacao} label="Classificação" size={160} items={['Ativo', 'Inativo', 'Preferencial']} error={erroClassificacao} helperText={erroClassificacaoMessage} />
             </div>
             <div className = "input-divs">
-                {type != null ? 
+                {type !== '' ? 
                 <>
                 <InputLabel sx={{ mt: 1 }} htmlFor="formatted-text-mask-input">{ type===0 ? 'CNPJ': 'CPF' }</InputLabel>
                 <Input
@@ -226,16 +388,17 @@ function AddNewClient({controller, setController, title, closeBtn}) {
                 id="add-phone-list"
                 type={'text'}
                 value={newPhone}
+                placeholder={maskToPhone}
                 onChange={handleNewPhone}
                 sx={{ m: 1, width: '100%'}}
+                inputComponent={phoneMask}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="toggle password visibility"
                       value={newPhone}
                       onClick={handleAddPhoneToList}
                     >
-                      <AddCircleIcon/>
+                      <SendIcon/>
                     </IconButton>
                   </InputAdornment>
               }/>
@@ -245,12 +408,12 @@ function AddNewClient({controller, setController, title, closeBtn}) {
                 <InputLabel sx={{ mt: 1 }} htmlFor="formatted-text-mask-input">CEP</InputLabel>
                 <Input
                     label="CEP"
-                    value={identity}
+                    value={cep}
                     placeholder={maskToCep}
                     id="cep"
                     name="cep"
                     sx={{ m: 1, width: '100%' }}
-                    onChange={handleChangeIdentity}
+                    onChange={handleChangeCep}
                     inputComponent={cepMask}
                 /></>
             </div>
@@ -286,7 +449,6 @@ function AddNewClient({controller, setController, title, closeBtn}) {
               </Paper></>
             : <></>}
             </div>
-            
         </Popup>
     );
 }

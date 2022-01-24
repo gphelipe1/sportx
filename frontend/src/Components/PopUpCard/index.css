@@ -1,11 +1,11 @@
 .popup{
-    position: fixed;
+    position: fixed !important;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.2);
-    
+    z-index: 10;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,5 +43,9 @@
 }
 
 .cancelar-btn{
+    height: 30px;
+}
+
+.add-btn{
     height: 30px;
 }

@@ -8,9 +8,7 @@ import { isAuthenticated } from '../../Services/auth';
 import { getClients } from '../../Services/clients';
 import Table from '../../Components/Table';
 import AddNewClient from '../../Components/AddNewClient';
-import { Stack } from '@mui/material';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import { Button } from '@mui/material';
+
 function Dashboard()
 {   
     const tableColumns=['ID', 'Nome/Razão Social', 'Email', 'Tipo', 'Classificação', 'CEP', 'CPF/CNPJ', 'Telefone'];
@@ -65,7 +63,7 @@ function Dashboard()
                 <Table tableData={data} headingColumns={tableColumns} loading={loading} page={page} pagesCount={pagesCount} handler={handleChangePage}/>
             </div>
             <div>
-                {addClient === true  ? <AddNewClient controller={addClient} setController={setAddClient} title="Adicionar Novo Cliente" closeBtn={true} /> : <></> }
+                {addClient === true  ? <AddNewClient className = "PopUp" controller={addClient} setController={setAddClient} title="Adicionar Novo Cliente" /> : <></> }
             </div>
            </>
     );
