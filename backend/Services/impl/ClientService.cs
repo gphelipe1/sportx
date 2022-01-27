@@ -74,6 +74,17 @@ namespace webnet.Services
             return _mapper.Map<Cliente, ClienteDto>(client);
         }
 
+        public ClienteDto GetById(int id)
+        {
+            var client = _repository.GetById(id);
+            if(client == null)
+            { 
+                return null;
+            }
+
+            return _mapper.Map<Cliente, ClienteDto>(client);
+        }
+
         public  ClienteDto Delete(int id)
         {
             var cliente = _repository.Delete(id);

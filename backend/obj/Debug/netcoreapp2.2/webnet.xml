@@ -33,6 +33,13 @@
             <param CPF="CPF" >CPF</param>
             <returns></returns>
         </member>
+        <member name="M:webnet.Controllers.ClientController.GetById(System.Int32)">
+            <summary>
+            Return a Client by CNPJ.
+            </summary>
+            <param CNPJ="CNPJ" >CNPJ</param>
+            <returns></returns>
+        </member>
         <member name="M:webnet.Controllers.ClientController.GetByCNPJ(System.String)">
             <summary>
             Return a Client by CNPJ.

@@ -61,6 +61,7 @@ function LoginPage()
     useEffect(() => {
         if (isAuthenticated()) {
             navigateTo('/home');
+            window.location.reload();
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

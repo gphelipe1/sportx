@@ -133,6 +133,30 @@ namespace webnet.Controllers
         }
 
         /// <summary>
+        /// Return a Client by its ID.
+        /// </summary>
+        /// <param id="id" >Client's ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("by-id")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize]
+        public ActionResult<ClienteDto> GetById(int id)
+        {
+            try {
+
+            var cliente = _service.GetById(id);
+            return cliente;
+
+            } catch(Exception e)
+            {
+                return BadRequest(e);
+            }
+            
+        }
+
+        /// <summary>
         /// Return a Client by CNPJ.
         /// </summary>
         /// <param CNPJ="CNPJ" >CNPJ</param>

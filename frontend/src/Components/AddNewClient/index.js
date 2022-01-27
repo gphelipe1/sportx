@@ -1,6 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /*eslint-disable no-useless-escape */
+
+/**
+ *  This component is being used to ADD a new client and also
+ *  to edit an already existing client
+ */
+
 import React, { useState, useEffect } from 'react'
 import Popup from '../PopUpCard';
 import { responsiveFontSizes, TextField } from '@mui/material';
@@ -16,7 +22,8 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import { saveNewClient } from '../../Services/clients';
+import { saveNewClient, updateClient } from '../../Services/clients';
+import Alert from '../../Components/Snackbar';
 
  // =================================================================================
  // START-Masks CONFIG ==============================================================
@@ -121,12 +128,17 @@ const ListItem = styled('li')(({ theme }) => ({
 // END-Complements ==================================================================
 // ==================================================================================
 
-function AddNewClient({controller, setController, title, closeBtn, setClientAdded}) {
+function AddNewClient({controller, setController, title, closeBtn, commandOnRefresh=null, clientToEdit=null}) {
     const [popupOutputsTrigger, setPopupOutputsTrigger] = useState(false)
     
     // Data
+    
     const [type, setType] = useState('');
     const [name, setName] = useState('');
+    //
+    // Only passed when its on edition mode
+    const [id, setId] = useState();
+    //
     const [email, setEmail] = useState('');
     const [identity, setIdentity] = useState('');
     const [cep, setCep] = useState('');
@@ -182,6 +194,7 @@ function AddNewClient({controller, setController, title, closeBtn, setClientAdde
 
     const handleDelete = (chipToDelete) => () => {
       setPhones((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+      setAllPhones((prevs) => prevs.filter((tel) => tel != chipToDelete.key));
     };
 
     const handleNameChange =(e) => { 
@@ -243,15 +256,30 @@ function AddNewClient({controller, setController, title, closeBtn, setClientAdde
         return true;
       }
     };
-
     // END-VALIDATIONS ///////////////////////////
     
 
     // SEND DATA TO DATABASE
     const sendDada = async () => {
-      console.log(allPhones);
       const response = await saveNewClient(name, email, type, classificacao, cep, identity, allPhones);
-      return response;
+      // setRefresh(true);
+      setController(false);
+      if(response.has_error){
+        commandOnRefresh('badSave')
+      } else{
+        commandOnRefresh('save')
+      }
+    }
+
+    const sendEdittedClient = async () => {
+      // console.log(allPhones);
+      const response = await updateClient(id, name, email, type, classificacao, cep, identity, allPhones);
+      setController(false);
+      if(response.has_error){
+        commandOnRefresh('badUpdate')
+      } else{
+        commandOnRefresh('update')
+      }
     }
 
     // VALIDATE ALL DATA BEFORE SEND IT TO DATABASE
@@ -270,8 +298,15 @@ function AddNewClient({controller, setController, title, closeBtn, setClientAdde
         err = true;
       }
       if(err === false){
-        const res = sendDada();
-        console.log(res);
+        // Cliente para editar
+        if(clientToEdit != null){
+
+          const res = sendEdittedClient();
+        
+        // Cliente para salvar no DB
+        }else{
+          const res = sendDada();
+        }
       }
     }
 
@@ -336,6 +371,23 @@ function AddNewClient({controller, setController, title, closeBtn, setClientAdde
         setErroTypeMessage('');
       }
     }, [type]);
+
+    useEffect(() => {
+      if(clientToEdit != null){
+        
+        console.log(clientToEdit);
+        setId(clientToEdit.id)
+        setName(clientToEdit.nome);
+        setEmail(clientToEdit.email);
+        setType(clientToEdit.type);
+        setCep(clientToEdit.cep);
+        setClassficacao(clientToEdit.classificacao);
+        clientToEdit.cpf &&  clientToEdit.type === 1 ? setIdentity(clientToEdit.cpf) : setIdentity('');
+        clientToEdit.cnpj && clientToEdit.type === 0 ? setIdentity(clientToEdit.cnpj) : setIdentity('');
+        clientToEdit.telefones[0] !== '' ? clientToEdit.telefones.map(phoneNumber => (setPhones(prev => [ ...prev,  { key: phoneNumber, label: phoneNumber }]))) : setPhones([]) ;
+        clientToEdit.telefones[0] !== '' ? setAllPhones(clientToEdit.telefones) : setAllPhones([]);
+      }
+    }, [])
 
     return(
         <Popup trigger={controller} setTrigger={setController} title={title} closeBtn={closeBtn} complement={<AddButton/>}>

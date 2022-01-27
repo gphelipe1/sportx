@@ -53,6 +53,57 @@ export async function saveNewClient(nome, email, tipo, classificacao, cep, ident
   }
 }
 
+export async function getClientById(clientId) {
+  try {
+    const response = await api.get(`v1/clientes/by-id/?id=${clientId}`);
+    const data = response.data;
+
+    return data;
+
+  } catch (err) {
+    if (err.response) {
+      if (err.response.status === 401) {
+        logout();
+      }
+    }
+    return {
+      has_error: true,
+      err
+    };
+  }
+}
+
+export async function updateClient(id, nome, email, tipo, classificacao, cep, identityValue='', phones=[]) {
+  try {
+    const updatedClient = {
+      "nome": nome,
+      "id":id,
+      "email": email,
+      "Type": tipo,
+      "Classificacao": classificacao,
+      "CEP": cep,
+      "CPF": tipo === 1 ? identityValue : null,
+      "CNPJ": tipo === 0 ? identityValue : null,
+      "Telefones": phones
+    }
+    const response = await api.put(`v1/clientes/update`, updatedClient);
+    const data = response.data;
+
+    return data;
+
+  } catch (err) {
+    if (err.response) {
+      if (err.response.status === 401) {
+        logout();
+      }
+    }
+    return {
+      has_error: true,
+      err
+    };
+  }
+}
+
 export async function removeClient(clientId) {
   try {
     const response = await api.delete(`v1/clientes/delete/?id=${clientId}`);

@@ -6,7 +6,6 @@ import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import Stack from '@mui/material/Stack';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@mui/material';
-import AddNewClient from '../AddNewClient';
 export default function Table({ tableData, headingColumns, loading, page, pagesCount, handler, editClient, removeClient}) {
 
   const useStyles = makeStyles(() => ({
@@ -21,7 +20,6 @@ export default function Table({ tableData, headingColumns, loading, page, pagesC
   return (
     <div>
       {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
-      {tableData.length === 0 ? <><img src={require('../../Assets/Images/no-data.gif')}  class="giphy-embed" ></img><p style={{color: "#fff"}}><h5 style={{marginLeft: '30%' }}>Sem clientes Cadastrados :(</h5></p></> : 
       <>
       <table>
         <thead>
@@ -47,7 +45,7 @@ export default function Table({ tableData, headingColumns, loading, page, pagesC
              </tr>);
           }) : <></>}
         </tbody>
-      </table></>}
+      </table></>
       { tableData.length > 0 ?
       <Stack className="mimicrow" spacing={2}  sx={{ bgcolor: (theme) => ('#252525'),color: (theme) => ('#fff'),
               p: 1,

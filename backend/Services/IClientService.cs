@@ -16,5 +16,6 @@ namespace webnet.Services
         ClienteDto GetByCPF(string cpf);
         ClienteDto GetByCNPJ(string cnpj);
         ClienteDto Delete(int id);
+        ClienteDto GetById(int id);
     }
 }
