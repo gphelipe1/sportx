@@ -4,26 +4,9 @@ import { logout } from './auth';
 export async function getClients(page, size,) {
   try {
     const response = await api.get(`v1/clientes?page=${page}&size=${size}`);
-    const allData = response.data.items;
-    const classificador = {0: 'Ativo', 1:'Inativo', 2: 'Preferencial' }
-    const clientType = { 0: 'Pessoa Jurídica', 1: 'Pessoa Física' }
-    const dataset = [];
+    const allData = response.data;
 
-    allData.map(
-      client => 
-      dataset.push({
-        "id": client.id,
-        "nome": client.nome,
-        "email": client.email,
-        "tipo": clientType[client.type],
-        "classificacao": classificador[client.classificacao],
-        "cep": client.cep === "" ? ' - - - - - -': client.cep,
-        "identity": client.type===1 ? client.cpf === null ? ' - - - - - -' : client.cpf : client.cnpj === null ? ' - - - - - -' : client.cnpj,
-        "phones": client.phones !== "" ? client.phones.replaceAll(';',`/ 
-        `) : '- - - - - -'
-      }));
-
-    return {data: dataset, totalItems: response.data.totalItems, currentPage: response.data.currentPage, pagesCount: response.data.pagesCount};
+    return allData;
 
   } catch (err) {
     if (err.response) {

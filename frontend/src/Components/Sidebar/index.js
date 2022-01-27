@@ -12,7 +12,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { createTheme, ThemeProvider } from '@mui/material';
-import Logo from '../../Assets/Logos/logosport.png'
+import Logo from '../../Assets/Logos/logo-white.png'
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -26,13 +26,13 @@ export const customTheme = createTheme({
     palette: {
       primary: {
         light: '#fff',
-        main: '#fff',
-        dark: '#191919',
-        contrastText: '#000'
+        main: '#404040',
+        dark: '#fff',
+        contrastText: '#fff'
       },
       background: {
         default: '#191919',
-        paper: '#fff',
+        paper: '#404040',
       },
     },
   });
@@ -102,7 +102,7 @@ export default function PermanentDrawerLeft() {
               <Typography variant="h6" noWrap component="div">
                 <button className ="burguer-menu"
                         onClick={() => {updateStatusSideBar()}}>
-                          {<MenuIcon/>}
+                          {<MenuIcon style={{ color: '#FFFFFF' }} />}
                 </button>
                 <img className="logo" src={Logo} alt="logo" /> SportsX
               </Typography>
@@ -117,22 +117,22 @@ export default function PermanentDrawerLeft() {
                   boxSizing: 'border-box',
                   transition: 'width 1s'
               },
-              color: 'dark',
               }}
               variant="permanent"
               anchor="left"
+              color='black'
           >
               <Toolbar />
               <Divider />
               <List>
-            {['Home', 'Add Client','Logout'].map((text, index) => (
+            {['Home', 'Add','Logout'].map((text, index) => (
               <>
               {text ==='Logout' ? <><br/><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}
               <ListItem button key={text} onClick={ text === 'Logout' ? logoutClick : text==='Add Client' ? addClientClick : homeClick } >
                 <ListItemIcon>
-                  {text === 'Home' ? <HomeIcon /> : text === 'Logout' ? <LogoutIcon/> : <PersonAddIcon/> }
+                  {text === 'Home' ? <HomeIcon sx={{ color: 'white'}} /> : text === 'Logout' ? <LogoutIcon sx={{ color: 'white'}} /> : <PersonAddIcon sx={{ color: 'white'}} /> }
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={<Typography style={{ color: '#FFFFFF' }}>{text}</Typography>} />
               </ListItem>{text ==='Logout' ? <><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}</>
             ))}
           </List>
