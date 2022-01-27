@@ -3,6 +3,8 @@
 ## Training Repository  | Backend - c#, .NET Core 2.2 | Frontend - ReactJS
  This repository contains usefull react components, such as a responsive and customizable table (using pagination), login card, authentication system (...)
  and its also a nice start for C# / .NET applications.
+## [Access]
+ The program creates a default user to have access to it. You can just use "admin"/"admin" to login.
 ## [Backend]
 - To run the backend of the aplication, simply run the commands
 ```sh
