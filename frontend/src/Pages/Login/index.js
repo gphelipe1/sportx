@@ -12,17 +12,16 @@ import logo from '../../Assets/Logos/logosport.png';
 import Particles from 'react-tsparticles';
 import Alert from '../../Components/Snackbar';
 import { isAuthenticated, signIn } from '../../Services/auth';
-import { useNavigate }  from 'react-router-dom'; 
+import { useNavigate }  from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function LoginPage()
 {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    
-    const navigateTo = useNavigate();
+    const [loading, setLoading] = useState(false);
 
-    // eslint-disable-next-line no-unused-vars
-    const [auth, setAuth] = useState('');
+    const navigateTo = useNavigate();
 
     const [errorAlert, setError] = useState(false);
 
@@ -43,6 +42,7 @@ function LoginPage()
     }
 
     const validateUser = async (event) => {
+        setLoading(true);
         event.preventDefault();
         const data =
         {
@@ -51,10 +51,16 @@ function LoginPage()
         };
         const response = await signIn(data);
         if(response.has_error){
-            setError(true);
+            setTimeout(()=>{
+                setLoading(false);
+                setError(true);
+            },500);
             return;
         }
-        navigateTo('/home');
+        setTimeout(()=>{
+            setLoading(false);
+            navigateTo('/home');
+        },500);
 
      }
 
@@ -84,7 +90,7 @@ function LoginPage()
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'flex-end'}}>
                 <Button type="submit" variant="contained" color='success' endIcon={<SendIcon />}>
-                    Entrar
+                    {loading === false ? 'Entrar' : <CircularProgress size={25} color='inherit'/>}
                 </Button>
             </Box>
         </ThemeProvider>
