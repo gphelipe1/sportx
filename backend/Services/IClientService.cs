@@ -11,7 +11,7 @@ namespace webnet.Services
     {
         ClienteDto Save(ClienteDto dto);
         ClienteDto Update(ClienteDto dto);
-        ResponseClienteDto GetAllClients(int page, int size);
+        ResponseClienteDto GetAllClients(int page, int size, string searchTerm);
         List<ClienteDto> GetByType(UserType type);
         ClienteDto GetByCPF(string cpf);
         ClienteDto GetByCNPJ(string cnpj);

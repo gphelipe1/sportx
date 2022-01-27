@@ -39,19 +39,36 @@ namespace webnet.Context
             return clientes;
         }
 
-        public ResponseClienteDto GetAllPaginated(int page, int size)
+        public ResponseClienteDto GetAllPaginated(int page, int size, string stringToSearch)
         {
-            var result = _context.Clientes.AsNoTracking().OrderByDescending(c => c.UpdatedAt).ToPaginated(page,size);
             var totalElements = _context.Clientes.AsNoTracking().Count();
             var totalPages = (int) (totalElements + size - 1) / size;
-            var response = new ResponseClienteDto {
-                items = result,
-                pagesCount = totalPages,
-                totalItems = totalElements,
-                itemsPerPage = size,
-                currentPage = page
-            };
-            return response;
+            if(stringToSearch == null){
+                var result = _context.Clientes.AsNoTracking().OrderByDescending(c => c.UpdatedAt).ToPaginated(page,size);
+                var response = new ResponseClienteDto {
+                    items = result,
+                    pagesCount = totalPages,
+                    totalItems = totalElements,
+                    itemsPerPage = size,
+                    currentPage = page
+                };
+                return response;
+            } else{
+                var searchTerm = stringToSearch.ToUpper();
+                var result = _context.Clientes.AsNoTracking().OrderByDescending(c => c.UpdatedAt)
+                            .Where(c => c.CEP.ToUpper().Contains(searchTerm) || c.CNPJ.ToUpper().Contains(searchTerm) || c.CPF.ToUpper().Contains(searchTerm)
+                                || c.id.ToString().ToUpper().Contains(searchTerm) || c.nome.ToUpper().Contains(searchTerm) || c.Phones.ToUpper().Contains(searchTerm)
+                                || c.email.ToUpper().Contains(searchTerm))
+                            .ToPaginated(page,size);
+                var response = new ResponseClienteDto {
+                    items = result,
+                    pagesCount = totalPages,
+                    totalItems = totalElements,
+                    itemsPerPage = size,
+                    currentPage = page
+                };
+                return response;
+            }
         }
 
         public List<Cliente> GetByUserType(UserType type)

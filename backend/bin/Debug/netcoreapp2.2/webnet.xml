@@ -4,7 +4,7 @@
         <name>webnet</name>
     </assembly>
     <members>
-        <member name="M:webnet.Controllers.ClientController.GetAllClients(System.Int32,System.Int32)">
+        <member name="M:webnet.Controllers.ClientController.GetAllClients(System.Int32,System.Int32,System.String)">
              <summary>
              Return all the clients stored.
              </summary>
@@ -35,9 +35,9 @@
         </member>
         <member name="M:webnet.Controllers.ClientController.GetById(System.Int32)">
             <summary>
-            Return a Client by CNPJ.
+            Return a Client by its ID.
             </summary>
-            <param CNPJ="CNPJ" >CNPJ</param>
+            <param id="id" >Client's ID</param>
             <returns></returns>
         </member>
         <member name="M:webnet.Controllers.ClientController.GetByCNPJ(System.String)">

@@ -1,9 +1,29 @@
 import api from './api';
 import { logout } from './auth';
 
-export async function getClients(page, size,) {
+export async function getClients(page, size) {
   try {
     const response = await api.get(`v1/clientes?page=${page}&size=${size}`);
+    const allData = response.data;
+
+    return allData;
+
+  } catch (err) {
+    if (err.response) {
+      if (err.response.status === 401) {
+        logout();
+      }
+    }
+    return {
+      has_error: true,
+      err
+    };
+  }
+}
+
+export async function getClientsOnSearch(page, size, searchTerm) {
+  try {
+    const response = await api.get(`v1/clientes?page=${page}&size=${size}&searchTerm=${searchTerm}`);
     const allData = response.data;
 
     return allData;

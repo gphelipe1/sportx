@@ -194,7 +194,7 @@ function AddNewClient({controller, setController, title, closeBtn, clientToEdit=
 
     const handleDelete = (chipToDelete) => () => {
       setPhones((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-      setAllPhones((prevs) => prevs.filter((tel) => tel != chipToDelete.key));
+      setAllPhones((prevs) => prevs.filter((tel) => tel !== chipToDelete.key));
     };
 
     const handleNameChange =(e) => { 
@@ -264,12 +264,14 @@ function AddNewClient({controller, setController, title, closeBtn, clientToEdit=
       const response = await saveNewClient(name, email, type, classificacao, cep, identity, allPhones);
       setController(false);
       responseOnRefresh(response)
+      emptyFields();
     }
 
     const sendEdittedClient = async () => {
       const response = await updateClient(id, name, email, type, classificacao, cep, identity, allPhones);
       setController(false);
       responseOnRefresh(response);
+      emptyFields();
     }
 
     // VALIDATE ALL DATA BEFORE SEND IT TO DATABASE
@@ -317,6 +319,7 @@ function AddNewClient({controller, setController, title, closeBtn, clientToEdit=
       setCep('');
       setIdentity('');
       setPhones([]);
+      setAllPhones([]);
       setNewPhone('');
       setErroName(false);
       setErroEmail(false);
@@ -363,8 +366,8 @@ function AddNewClient({controller, setController, title, closeBtn, clientToEdit=
     }, [type]);
 
     useEffect(() => {
-      if(clientToEdit != null){
-        
+      emptyFields();
+      if(clientToEdit != null){  
         console.log(clientToEdit);
         setId(clientToEdit.id)
         setName(clientToEdit.nome);

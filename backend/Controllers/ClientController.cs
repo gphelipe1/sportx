@@ -44,13 +44,13 @@ namespace webnet.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize]
-        public IActionResult GetAllClients(int page=1, int size=10)
+        public IActionResult GetAllClients(int page=1, int size=10, string searchTerm=null)
         {
             try {
             
             if(page < 1) page = 1;
 
-            var clientes = _service.GetAllClients(page, size);
+            var clientes = _service.GetAllClients(page, size, searchTerm);
             return Ok(clientes);
 
             } catch(Exception e)

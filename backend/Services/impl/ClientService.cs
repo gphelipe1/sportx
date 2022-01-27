@@ -46,9 +46,10 @@ namespace webnet.Services
             return clientsDto;
         }
 
-        public ResponseClienteDto GetAllClients(int page, int size)
+        public ResponseClienteDto GetAllClients(int page, int size, string searchTerm)
         {
-            var result = _repository.GetAllPaginated(page, size);
+
+            var result = _repository.GetAllPaginated(page, size, searchTerm);
             return result;
         }
 

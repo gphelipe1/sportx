@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
@@ -66,6 +67,15 @@ export default function PermanentDrawerLeft({getData, onSearch}) {
 
   const sendToResponseRefresh = (resp) => {
     setUpdate(true);
+    if(resp.has_error){
+      setActionWrong(true);
+    }else{
+      setActionComplete(true);
+    }
+  }
+
+  const handleSearch = (e) => {
+    onSearch(e.target.value);
   }
   
   const homeClick = () => {
@@ -124,7 +134,7 @@ export default function PermanentDrawerLeft({getData, onSearch}) {
                 </button>
                 <img className="logo" src={Logo} alt="logo" /> SportsX
               </Typography>
-              <TextField sx={{ml: '20%', width: '30%', bgcolor: (theme) => ('#fff'),}} id="filled-basic" label="Search" variant="filled" />
+              <TextField sx={{ml: '20%', width: '30%', bgcolor: (theme) => ('#fff'),}} id="filled-basic" label="Search" variant="filled" onChange={handleSearch} />
               </Toolbar>
           </AppBar>
           <Drawer
@@ -159,7 +169,7 @@ export default function PermanentDrawerLeft({getData, onSearch}) {
           </Box>
       </ThemeProvider>
       <div>
-        {actionComplete ? <Alert setOpen={() => setActionComplete()} open={actionComplete} severity="success" message="Ação completada com sucesso!" /> : <></> }
+        {actionComplete ? <Alert setOpen={() => setActionComplete()} open={actionComplete} severity="success" message="Cliente adicionado com sucesso!" /> : <></> }
         {actionWrong ? <Alert setOpen={() => setActionWrong()} open={actionWrong} severity="error" message="Erro ao realizar a ação!" /> : <></> }    
       </div>
       <AddNewClient responseOnRefresh={sendToResponseRefresh} controller={popUpController} setController={setPopUpController} title="Adicionar Novo Cliente" closeBtn={true} />
