@@ -58,7 +58,6 @@ function Dashboard()
 
     const editClicked = async (response) => {
         const client = await getClientById(response.row.id);
-        console.log(client);
         if(client !== null) {
             setClientToEdit(client);
             setEdittingClient(true);
@@ -77,7 +76,6 @@ function Dashboard()
 
     const removeClicked = async (response) => {
         const removed = await removeClient(response.row.id);
-        console.log(removed);
         if(removed.has_error){
             setDeleteError(true);
         }else{
@@ -105,7 +103,7 @@ function Dashboard()
             "tipo": clientType[client.type],
             "classificacao": classificador[client.classificacao],
             "cep": client.cep !== null && client.cep !== ""  ? client.cep : ' - - - - - -',
-            "identity": client.type === 1 ? client.cpf !== null && client.phones !== "" ? client.cpf :  ' - - - - - -'  : client.cnpj === null ? ' - - - - - -' : client.cnpj,
+            "identity": client.type === 1 ? client.cpf !== null && client.cpf !== ""  ? client.cpf :  ' - - - - - -'  : client.cnpj !== null && client.cnpj !== "" ? client.cnpj : ' - - - - - -' ,
             "phones": client.phones !== null && client.phones !== ""  ? client.phones.replaceAll(';',` / `) : '- - - - - -'
           }));
     
@@ -128,7 +126,6 @@ function Dashboard()
 
     useEffect(() => {
         getData();
-        console.log(data);
     }, [page]);
 
     useEffect(() => {
@@ -137,10 +134,6 @@ function Dashboard()
             setRefresh(false);
         }
     }, [refresh]);
-
-    useEffect(()=>{
-        console.log("ACTION MADE");
-    }, [actionComplete])
 
     useEffect(()=>{
         if(searchTerm!== ""){

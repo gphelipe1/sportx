@@ -62,7 +62,7 @@
         </member>
         <member name="M:webnet.Controllers.UserController.Login(webnet.DTO.UserDto)">
             <summary>
-            Login do usuário - ADMIN/ADMIN DEFAULT
+            User Login - admim / admin (DEFAULT)
             </summary>
             <returns></returns>
         </member>

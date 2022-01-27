@@ -374,9 +374,9 @@ function AddNewClient({controller, setController, title, closeBtn, clientToEdit=
         setEmail(clientToEdit.email);
         setType(clientToEdit.type);
         setCep(clientToEdit.cep);
+        clientToEdit.type === 1 ? setIdentity(clientToEdit.cpf) : setIdentity(clientToEdit.cnpj);
         setClassficacao(clientToEdit.classificacao);
-        clientToEdit.cpf &&  clientToEdit.type === 1 ? setIdentity(clientToEdit.cpf) : setIdentity('');
-        clientToEdit.cnpj && clientToEdit.type === 0 ? setIdentity(clientToEdit.cnpj) : setIdentity('');
+        // setIdentity(clientToEdit.identity);
         clientToEdit.telefones[0] !== '' ? clientToEdit.telefones.map(phoneNumber => (setPhones(prev => [ ...prev,  { key: phoneNumber, label: phoneNumber }]))) : setPhones([]) ;
         clientToEdit.telefones[0] !== '' ? setAllPhones(clientToEdit.telefones) : setAllPhones([]);
       }
