@@ -26,7 +26,7 @@ namespace webnet.Controllers
         }
 
         /// <summary>
-        /// Login do usuário - admim / admin (DEFAULT)
+        /// User Login - admim / admin (DEFAULT)
         /// </summary>
         /// <returns></returns>
         [HttpPost]
