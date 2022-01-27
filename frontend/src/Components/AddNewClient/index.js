@@ -128,7 +128,7 @@ const ListItem = styled('li')(({ theme }) => ({
 // END-Complements ==================================================================
 // ==================================================================================
 
-function AddNewClient({controller, setController, title, closeBtn, commandOnRefresh=null, clientToEdit=null}) {
+function AddNewClient({controller, setController, title, closeBtn, clientToEdit=null, responseOnRefresh}) {
     const [popupOutputsTrigger, setPopupOutputsTrigger] = useState(false)
     
     // Data
@@ -166,7 +166,7 @@ function AddNewClient({controller, setController, title, closeBtn, commandOnRefr
     
     // Add Client Button
     const AddButton = () => {
-      return(<Button onClick={validateAndSend} variant='contained' color="success">Adicionar</Button>);
+      return(<Button onClick={validateAndSend} variant='contained' color="success">{clientToEdit !== null ? 'Editar' : 'Adicionar' }</Button>);
     }
     
 
@@ -262,24 +262,14 @@ function AddNewClient({controller, setController, title, closeBtn, commandOnRefr
     // SEND DATA TO DATABASE
     const sendDada = async () => {
       const response = await saveNewClient(name, email, type, classificacao, cep, identity, allPhones);
-      // setRefresh(true);
       setController(false);
-      if(response.has_error){
-        commandOnRefresh('badSave')
-      } else{
-        commandOnRefresh('save')
-      }
+      responseOnRefresh(response)
     }
 
     const sendEdittedClient = async () => {
-      // console.log(allPhones);
       const response = await updateClient(id, name, email, type, classificacao, cep, identity, allPhones);
       setController(false);
-      if(response.has_error){
-        commandOnRefresh('badUpdate')
-      } else{
-        commandOnRefresh('update')
-      }
+      responseOnRefresh(response);
     }
 
     // VALIDATE ALL DATA BEFORE SEND IT TO DATABASE

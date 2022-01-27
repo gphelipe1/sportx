@@ -28,10 +28,8 @@ function Dashboard()
     const [clientToEdit, setClientToEdit] = useState({});
 
     // Alerts
-    const [updateAlert, setUpdateAlert] = useState(false);
-    const [savedAlert, setSavedAlert] = useState(false);
-    const [badUpdateAlert, setBadUpdateAlert] = useState(false);
-    const [badSavedAlert, setBadSavedAlert] = useState(false);
+    const [actionComplete, setActionComplete] = useState(false);
+    const [actionWrong, setActionWrong] = useState(false);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -54,6 +52,21 @@ function Dashboard()
         }
     }
 
+    // const onSearchQuery = (searchString) => {
+    //     if(searchString !== ""){
+    //         setData(prev => prev.filter(dt => dt.))
+    //     }
+    // }
+
+    const getResponseAndRefresh = (response) => {
+        getData();
+        if(response.has_error){
+            setActionWrong(true);
+        }else{
+            setActionComplete(true);
+        }
+    }
+
     const removeClicked = async (response) => {
         const removed = await removeClient(response.row.id);
         console.log(removed);
@@ -63,19 +76,6 @@ function Dashboard()
             setClientDeleted(true);
         }
         getData(page, rowsPerPage);
-    }
-
-    const commandAlertHandler = (command) => {
-        getData();
-        if(command === 'update'){
-            setUpdateAlert(true);
-        } else if(command === 'save') {
-            setSavedAlert(true);
-        } else if(command === 'badUpdate') {
-            setBadUpdateAlert(true);
-        } else if(command === 'badSave') {
-            setBadSavedAlert(true);
-        }
     }
 
     function transformData(fullResponse){
@@ -116,6 +116,7 @@ function Dashboard()
 
     useEffect(() => {
         getData();
+        console.log(data);
     }, [page]);
 
     useEffect(() => {
@@ -124,24 +125,33 @@ function Dashboard()
             setRefresh(false);
         }
     }, [refresh]);
+
+    useEffect(()=>{
+        console.log("ACTION MADE");
+    }, [actionComplete])
     
 
     return(
         <>
             
-            <Sidebar />
+            <Sidebar getData={() => getData()} />
             <div className="tableContainer">
                 {loading === false ?  data.length === 0 ? <><img src={require('../../Assets/Images/no-data.gif')}  class="giphy-embed" ></img><p style={{color: "#fff"}}><h5 style={{marginLeft: '30%' }}>Sem clientes Cadastrados :(</h5></p></> 
                 :  <Table tableData={data} headingColumns={tableColumns} loading={loading} page={page} pagesCount={pagesCount} handler={handleChangePage} editClient={editClicked} removeClient={removeClicked}/> : <></> }
             </div>
-                {edittingClient === true  ? <AddNewClient className = "PopUp" controller={edittingClient} setController={setEdittingClient} title="Editar Cliente" closeBtn={true} clientToEdit={clientToEdit} commandOnRefresh={(command) => commandAlertHandler(command)}/> : <></> }
+                {edittingClient === true  ? <AddNewClient className = "PopUp" 
+                                                        controller={edittingClient}
+                                                        setController={setEdittingClient}
+                                                        title="Editar Cliente"
+                                                        closeBtn={true}
+                                                        clientToEdit={clientToEdit}
+                                                        responseOnRefresh={getResponseAndRefresh}
+                                                    /> : <></> }
             <div>
                 {clientDeleted ? <Alert setOpen={() => setClientDeleted()} open={clientDeleted} severity="success" message="Cliente Deletado com sucesso!" /> : <></> }
                 {deleteError ? <Alert setOpen={() => setDeleteError()} open={deleteError} severity="error" message="Algo deu errado ao deletar o cliente!" /> : <></> }
-                {updateAlert ? <Alert setOpen={() => setUpdateAlert()} open={savedAlert} severity="success" message="Cliente editado com sucesso!" /> : <></> }
-                {savedAlert ? <Alert setOpen={() => setSavedAlert()} open={savedAlert} severity="success" message="Cliente salvo com sucesso!" /> : <></> }
-                {badUpdateAlert ? <Alert setOpen={() => setBadUpdateAlert()} open={savedAlert} severity="error" message="Erro ao editar Cliente!" /> : <></> }
-                {badSavedAlert ? <Alert setOpen={() => setBadSavedAlert()} open={savedAlert} severity="error" message="Erro ao salvar Cliente!" /> : <></> }
+                {actionComplete ? <Alert setOpen={() => setActionComplete()} open={actionComplete} severity="success" message="Ação completada com sucesso!" /> : <></> }
+                {actionWrong ? <Alert setOpen={() => setActionWrong()} open={actionWrong} severity="error" message="Erro ao realizar a ação!" /> : <></> }
             </div>
            </>
     );

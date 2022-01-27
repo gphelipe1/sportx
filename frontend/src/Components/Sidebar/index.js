@@ -13,11 +13,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { createTheme, ThemeProvider } from '@mui/material';
 import Logo from '../../Assets/Logos/logo-white.png'
+import Alert from '../../Components/Snackbar';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { logout } from '../../Services/auth';
 import { Navigate } from 'react-router-dom';
+import { TextField } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddNewClient from '../AddNewClient';
 import './index.css';
@@ -37,11 +39,16 @@ export const customTheme = createTheme({
     },
   });
 
-export default function PermanentDrawerLeft() {
+export default function PermanentDrawerLeft({getData, onSearch}) {
   const [drawerWidth, setDrawerWidth] = useState(240);
   // eslint-disable-next-line no-unused-vars
   const [openBurguer, setOpenBurguer] = useState(false);
 
+  // Alerts
+  const [actionComplete, setActionComplete] = useState(false);
+  const [actionWrong, setActionWrong] = useState(false);
+
+  const [update, setUpdate] = useState(false);
   const [popUpController, setPopUpController] = useState(false);
 
   const logoutClick = () => {
@@ -55,6 +62,10 @@ export default function PermanentDrawerLeft() {
       setDrawerWidth(0);
     }
     setPopUpController(true);
+  }
+
+  const sendToResponseRefresh = (resp) => {
+    setUpdate(true);
   }
   
   const homeClick = () => {
@@ -87,6 +98,13 @@ export default function PermanentDrawerLeft() {
   useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
   },[] );
+
+  useEffect(() => {
+    if(update === true){
+      getData();
+      setUpdate(false);
+    }
+  },[update] );
   
   return (
     <>
@@ -106,6 +124,7 @@ export default function PermanentDrawerLeft() {
                 </button>
                 <img className="logo" src={Logo} alt="logo" /> SportsX
               </Typography>
+              <TextField sx={{ml: '20%', width: '30%', bgcolor: (theme) => ('#fff'),}} id="filled-basic" label="Search" variant="filled" />
               </Toolbar>
           </AppBar>
           <Drawer
@@ -139,7 +158,11 @@ export default function PermanentDrawerLeft() {
           </Drawer>
           </Box>
       </ThemeProvider>
-      <AddNewClient controller={popUpController} setController={setPopUpController} title="Adicionar Novo Cliente" closeBtn={true} />
+      <div>
+        {actionComplete ? <Alert setOpen={() => setActionComplete()} open={actionComplete} severity="success" message="Ação completada com sucesso!" /> : <></> }
+        {actionWrong ? <Alert setOpen={() => setActionWrong()} open={actionWrong} severity="error" message="Erro ao realizar a ação!" /> : <></> }    
+      </div>
+      <AddNewClient responseOnRefresh={sendToResponseRefresh} controller={popUpController} setController={setPopUpController} title="Adicionar Novo Cliente" closeBtn={true} />
     </>
   );
 }
