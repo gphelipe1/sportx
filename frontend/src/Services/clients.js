@@ -52,3 +52,23 @@ export async function saveNewClient(nome, email, tipo, classificacao, cep, ident
     };
   }
 }
+
+export async function removeClient(clientId) {
+  try {
+    const response = await api.delete(`v1/clientes/delete/?id=${clientId}`);
+    const data = response.data;
+
+    return data;
+
+  } catch (err) {
+    if (err.response) {
+      if (err.response.status === 401) {
+        logout();
+      }
+    }
+    return {
+      has_error: true,
+      err
+    };
+  }
+}

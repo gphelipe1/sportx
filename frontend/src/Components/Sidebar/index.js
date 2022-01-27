@@ -128,7 +128,7 @@ export default function PermanentDrawerLeft() {
             {['Home', 'Add','Logout'].map((text, index) => (
               <>
               {text ==='Logout' ? <><br/><Divider sx={{ width: '80px' }} variant="inset"  /></> : <></>}
-              <ListItem button key={text} onClick={ text === 'Logout' ? logoutClick : text==='Add Client' ? addClientClick : homeClick } >
+              <ListItem button key={text} onClick={ text === 'Logout' ? logoutClick : text==='Add' ? addClientClick : homeClick } >
                 <ListItemIcon>
                   {text === 'Home' ? <HomeIcon sx={{ color: 'white'}} /> : text === 'Logout' ? <LogoutIcon sx={{ color: 'white'}} /> : <PersonAddIcon sx={{ color: 'white'}} /> }
                 </ListItemIcon>
@@ -139,7 +139,7 @@ export default function PermanentDrawerLeft() {
           </Drawer>
           </Box>
       </ThemeProvider>
-      < AddNewClient controller={popUpController} setController={setPopUpController} title="Adicionar Novo Cliente" closeBtn={true} />
+      <AddNewClient controller={popUpController} setController={setPopUpController} title="Adicionar Novo Cliente" closeBtn={true} />
     </>
   );
 }

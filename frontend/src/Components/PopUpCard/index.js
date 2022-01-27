@@ -16,7 +16,7 @@ function Popup(props){
      ******* complement ******** Um botão adicional no popup --- (opcional)
     */
 
-    return(props.trigger) ? (
+    return props.trigger === true ? (
         <div className = "popup">
             <div className = "popup-inner-content">
                 <div className="popup_title">

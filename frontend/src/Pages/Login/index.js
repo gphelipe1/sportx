@@ -69,7 +69,7 @@ function LoginPage()
         <>
         <ThemeProvider theme={theme}>
             <Box sx={{ display: 'flex', alignItems: 'flex-end', marginBottom: '20px' }}>
-                {errorAlert ? <Alert setOpen={() => setError()} severity="error" message="Credenciais Inválidas" /> : <></> }
+                {errorAlert ? <Alert setOpen={() => setError()} open={errorAlert} severity="error" message="Credenciais Inválidas" /> : <></> }
                 <img className="logo" src={logo} alt="logo"/>
                 <span>SportsX</span>
             </Box>

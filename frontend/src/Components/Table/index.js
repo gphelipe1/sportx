@@ -6,7 +6,8 @@ import PersonRemoveAlt1Icon from '@mui/icons-material/PersonRemoveAlt1';
 import Stack from '@mui/material/Stack';
 import { makeStyles } from '@mui/styles';
 import { Button } from '@mui/material';
-export default function Table({ tableData, headingColumns, loading, page, pagesCount, handler}) {
+import AddNewClient from '../AddNewClient';
+export default function Table({ tableData, headingColumns, loading, page, pagesCount, handler, editClient, removeClient}) {
 
   const useStyles = makeStyles(() => ({
     ul: {
@@ -41,8 +42,8 @@ export default function Table({ tableData, headingColumns, loading, page, pagesC
               <td data-label="CEPl">{row.cep}</td>
               <td data-label="CPF/CNPJ">{row.identity}</td>
               <td data-label="Telefones">{row.phones}</td>
-              <td data-label="Editar"><Button><EditIcon sx={{ color: '#42ba96' }} /></Button></td>
-              <td data-label="Remover"><Button><PersonRemoveAlt1Icon sx={{ color: '#df4759' }} /></Button></td>
+              <td data-label="Editar"><Button onClick={() => editClient({row}) }><EditIcon sx={{ color: '#42ba96' }} /></Button></td>
+              <td data-label="Remover"><Button onClick={() =>removeClient({row}) }><PersonRemoveAlt1Icon sx={{ color: '#df4759' }} /></Button></td>
              </tr>);
           }) : <></>}
         </tbody>

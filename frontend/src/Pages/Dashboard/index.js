@@ -5,7 +5,8 @@ import Sidebar from '../../Components/Sidebar';
 import './index.css'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../../Services/auth';
-import { getClients } from '../../Services/clients';
+import { getClients, removeClient } from '../../Services/clients';
+import Alert from '../../Components/Snackbar';
 import Table from '../../Components/Table';
 import AddNewClient from '../../Components/AddNewClient';
 
@@ -21,6 +22,8 @@ function Dashboard()
     const [rowsPerPage, setRowsPerPage] = useState(8);
     const [pagesCount, setPagesCount] = useState(0);
     const [addClient, setAddClient] = useState(false);
+    const [clientDeleted, setClientDeleted] = useState(false);
+    const [deleteError, setDeleteError] = useState(false);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -31,12 +34,26 @@ function Dashboard()
     //     console.log(dataTable);
     // }
 
-    async function getData(dpage, dsize) {
-        const dataLoaded = await getClients(page,rowsPerPage);
+    async function getData(dpage=page, dsize=rowsPerPage) {
+        const dataLoaded = await getClients(dpage,dsize);
         const formatData = transformData(dataLoaded);
         setData(formatData.data);
         setPagesCount(formatData.pagesCount);
         setLoading(false);
+    }
+
+    const editClicked = (response) => {
+        console.log(response.row);
+    }
+    const removeClicked = async (response) => {
+        const removed = await removeClient(response.row.id);
+        console.log(removed);
+        if(removed.has_error){
+            setDeleteError(true);
+        }else{
+            setClientDeleted(true);
+        }
+        getData(page, rowsPerPage);
     }
 
     function transformData(fullResponse){
@@ -76,8 +93,15 @@ function Dashboard()
     }, []);
 
     useEffect(() => {
-        getData(page,rowsPerPage);
+        getData();
+        console.log("PAGE");
+        console.log(page);
     }, [page]);
+
+
+    useEffect(() => {
+        console.log(addClient);
+    }, [addClient]);
     
 
     return(
@@ -85,10 +109,11 @@ function Dashboard()
             
             <Sidebar />
             <div className="tableContainer">
-                {loading === false ? <Table tableData={data} headingColumns={tableColumns} loading={loading} page={page} pagesCount={pagesCount} handler={handleChangePage}/> : <></> }
+                {loading === false ? <Table tableData={data} headingColumns={tableColumns} loading={loading} page={page} pagesCount={pagesCount} handler={handleChangePage} editClient={editClicked} removeClient={removeClicked}/> : <></> }
             </div>
             <div>
-                {addClient === true  ? <AddNewClient className = "PopUp" controller={addClient} setController={setAddClient} title="Adicionar Novo Cliente" /> : <></> }
+            {clientDeleted ? <Alert setOpen={() => setClientDeleted()} open={clientDeleted} severity="success" message="Cliente Deletado com sucesso" /> : <></> }
+            {deleteError ? <Alert setOpen={() => setDeleteError()} open={deleteError} severity="error" message="Algo deu errado ao deletar o cliente" /> : <></> }
             </div>
            </>
     );

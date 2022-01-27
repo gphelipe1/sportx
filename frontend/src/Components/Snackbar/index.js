@@ -9,25 +9,23 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function CustomizedSnackbars(props) {
-  const [open, setOpen] = React.useState(true);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpen(false);
     props.setOpen(false);
   };
 
-  useEffect(() => {
-    //Runs on the first render
-    //And any time any dependency value changes
-  }, [open]);
+  // useEffect(() => {
+  //   //Runs on the first render
+  //   //And any time any dependency value changes
+  // }, [open]);
 
   return (
     <Stack sx={{ width: '100%' }} >
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={props.open} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={props.severity}  sx={{ width: '100%' }} >
             {props.message}
         </Alert>
